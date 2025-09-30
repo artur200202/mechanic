@@ -43,7 +43,7 @@ def update_service_ticket(service_ticket_id):
   try:
     service_ticket_data = service_tickets_schema.load (request.json) # passing the info to schema to validate the data
   except ValidationError as e:
-    return jsonify({"message": e.message}), 400
+    return jsonify({"message": e.messages}), 400
   
   for key, value in service_ticket_data.items(): # looping through customer data and sets it as the new customer info
     setattr(service_ticket, key, value )
