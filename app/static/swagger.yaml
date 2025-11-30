@@ -1,0 +1,94 @@
+swagger: "2.0"
+info:
+  title: "Mechanic"
+  description: "Use to manage everday functionalities of a mechanic"
+  version: "1.0.0"
+host: "127.0.0.1:5002"
+schemes:
+  - "https"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+paths:
+paths:
+  /customers/login:
+    post:
+			tags:
+				- members
+      summary: "Login endpoint, (generates token)"
+      description: "Validates member credentials, generates and return a member specific token."
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Login Credentials"
+          required: true
+          schema:
+            $ref: "#/definitions/LoginCredentials"
+      response:
+        200:
+          description: "Login successful"
+          schema:
+            $ref: "#/definitions/LoginResponse"
+
+  ## rest of code
+
+
+
+definitions:
+  LoginCredentials:
+    type: 'object'
+    properties:
+      username:
+        type:'string'
+      password:
+        type:'string'
+
+      required:
+        -username
+        -password
+    
+    LoginResponse:
+      type:'object'
+      properties:
+        token:
+          type:'string'
+        message:
+          type:'string'
+        status:
+          type:'string'
+
+CreateCustomerPayload:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      email:
+        type: "string"
+      address:
+        type: "string"
+				format: date
+      password:
+        type: "string"
+      
+    required:
+      - name
+      - email
+      - phone
+      - address
+      - password
+
+
+  CreateCustomerResponse:
+    type: "object"
+    properties:
+      id:
+        type: "int"
+      name:
+        type: "string"
+      email:
+        type: "string"
+      DOB:
+        type: "string"
+      password:
+        type: "string"

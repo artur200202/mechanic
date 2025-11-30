@@ -6,6 +6,7 @@ from marshmallow import ValidationError
 from app.models import Customers , db
 from app.extensions import limiter, cache
 from app.utils.util import encode_token, token_required
+from werkzeug.security import check_password_hash, generate_password_hash
 
 @customer_bp.route('/login', methods = ['POST'])
 def login():

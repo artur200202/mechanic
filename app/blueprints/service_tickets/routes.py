@@ -1,8 +1,9 @@
 from app.blueprints.service_tickets import service_ticket_bp
 from .schemas import service_tickets_schema, services_tickets_schema
+from app.blueprints.mechanics.schemas import mechanics_schema, mechanic_schema
 from flask import request , jsonify
 from marshmallow import ValidationError
-from app.models import ServiceTickets , db
+from app.models import ServiceTickets , db, Mechanics
 
 @service_ticket_bp.route ('', methods = ['POST'])
 def create_service_ticket():
@@ -15,6 +16,46 @@ def create_service_ticket():
   db.session.add(new_service_ticket)
   db.session.commit()
   return service_tickets_schema.jsonify(new_service_ticket), 201
+
+@service_ticket_bp.route('<int:service_ticket_id>/add_mechanic/<int:mechanic_id>', methods = ['PUT'])
+def add_mechanic(service_ticket_id, mechanic_id):
+  service = db.session.get(ServiceTickets, service_ticket_id)
+  mechanic = db.session.get(Mechanics, mechanic_id)
+  if mechanic not in service.mechanics:
+    service.mechanics.append(mechanic)
+    db.session.commit()
+    return jsonify({
+      'message': f'successfully add {mechanic.first_name} to service ticket',
+      'service_ticket': service_tickets_schema.dump(service),
+      'mechanics': mechanics_schema.dump(service.mechanics)
+    }), 200
+
+  return jsonify('this mechanic is already on service ticket'), 400
+
+@service_ticket_bp.route('<int:service_ticket_id>/view_ticket', methods = ['GET'])
+def get_ticket_with_mechanics(service_ticket_id):
+  service = db.session.get(ServiceTickets, service_ticket_id)
+  return jsonify({
+    'service_ticket': service_tickets_schema.dump(service),
+    'mechanics': mechanics_schema.dump(service.mechanics)
+  }), 200
+
+    
+@service_ticket_bp.route('/<int:service_ticket_id>/remove_mechanic/<int:mechanic_id>', methods= ['PUT'])
+def remove_mechanic(service_ticket_id, mechanic_id):
+  service = db.session.get(ServiceTickets, service_ticket_id)
+  mechanic= db.session.get(Mechanics , mechanic_id)
+
+  if mechanic in service.mechanics:
+    service.mechanics.remove(mechanic)
+    db.session.commit()
+    return jsonify({
+      'message': f'successully removed {mechanic.first_name} from service ticket',
+      'service': service_tickets_schema.dump(service),
+      'mechanic': mechanic_schema.dump(mechanic)
+    }) , 200
+  
+  return jsonify('this mechanic is not on the service ticket'), 400
 
 @service_ticket_bp.route('', methods=['GET']) #Endpoint to get user information
 def read_service_tickets():

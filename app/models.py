@@ -26,7 +26,7 @@ class Customers(Base):
   address: Mapped [str] = mapped_column (String (122), nullable=False)
   password: Mapped [str] = mapped_column (String (130), nullable= False)
 
-  service_tickets: Mapped[list['ServiceTickets']] = relationship('ServiceTickets', back_populates= 'customer')
+  service_tickets: Mapped[list['ServiceTickets']] = relationship('ServiceTickets', back_populates= 'customer', cascade= "all, delete-orphan")
 
   def __repr__(self):
     return super().__repr__()
