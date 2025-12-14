@@ -1,23 +1,23 @@
 swagger: "2.0"
 info:
-  title: "Mechanic"
+  title: "Mechanic "
   description: "Use to manage everday functionalities of a mechanic"
   version: "1.0.0"
 host: "127.0.0.1:5002"
 schemes:
-  - "https"
+  - "http"
 consumes:
   - "application/json"
 produces:
   - "application/json"
-paths:
+
 paths:
   /customers/login:
     post:
-			tags:
-				- members
+      tags:
+        - Customers
       summary: "Login endpoint, (generates token)"
-      description: "Validates member credentials, generates and return a member specific token."
+      description: "Validates customers credentials, generates and return a customers specific token"
       parameters:
         - in: "body"
           name: "body"
@@ -25,70 +25,61 @@ paths:
           required: true
           schema:
             $ref: "#/definitions/LoginCredentials"
-      response:
+      responses:
         200:
           description: "Login successful"
           schema:
             $ref: "#/definitions/LoginResponse"
 
-  ## rest of code
-
-
-
 definitions:
   LoginCredentials:
-    type: 'object'
+    type: object
     properties:
       username:
-        type:'string'
+        type: string
       password:
-        type:'string'
+        type: string
 
-      required:
-        -username
-        -password
-    
-    LoginResponse:
-      type:'object'
-      properties:
-        token:
-          type:'string'
-        message:
-          type:'string'
-        status:
-          type:'string'
-
-CreateCustomerPayload:
-    type: "object"
-    properties:
-      name:
-        type: "string"
-      email:
-        type: "string"
-      address:
-        type: "string"
-				format: date
-      password:
-        type: "string"
-      
     required:
-      - name
       - email
-      - phone
-      - address
       - password
 
-
-  CreateCustomerResponse:
-    type: "object"
+  LoginResponse:
+    type: object
     properties:
-      id:
-        type: "int"
-      name:
-        type: "string"
-      email:
-        type: "string"
-      DOB:
-        type: "string"
-      password:
-        type: "string"
+      message:
+        type: string
+      token:
+        type: string
+
+CustomerInput:
+  type: object
+  properties:
+    name:
+      type: "string"
+    email:
+      type: "string"
+    DOB:
+      type: "string"
+    password:
+      type: "string"
+
+  required:
+    - name
+    - email
+    - DOB
+    - password
+
+CreateCustomerResponse:
+  type: "object"
+  properties:
+    id:
+      type: "int"
+    name:
+      type: "string"
+    email:
+      type: "string"
+    DOB:
+      type: "string"
+    password:
+      type: "string"
