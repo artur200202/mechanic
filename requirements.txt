@@ -24,3 +24,4 @@ SQLAlchemy==2.0.44
 typing_extensions==4.15.0
 Werkzeug==3.1.4
 wrapt==1.17.3
+gunicorn== 23.0.0
